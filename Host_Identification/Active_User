@@ -1,0 +1,9 @@
+// find host by active user
+let ActiveUser = "USERNAME_HERE";
+DeviceInfo
+| where LoggedOnUsers contains ActiveUser
+| extend 
+    UserName = extract('"UserName":"([^"]+)"', 1, LoggedOnUsers),
+    DomainName = extract('"DomainName":"([^"]+)"', 1, LoggedOnUsers),
+    Sid = extract('"Sid":"([^"]+)"', 1, LoggedOnUsers)
+| distinct DeviceName, PublicIP, OSPlatform, UserName, DomainName, Sid
