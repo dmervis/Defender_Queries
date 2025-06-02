@@ -1,0 +1,6 @@
+// find hostname by private IP address
+let IP = "PRIVATE_IP_ADDRESS_HERE";
+DeviceNetworkEvents
+| where LocalIP contains IP
+| where InitiatingProcessAccountName !in ('system', 'network service', '')
+| distinct DeviceName, LocalIP, InitiatingProcessAccountName
