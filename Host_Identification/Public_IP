@@ -1,0 +1,6 @@
+// find hostname by public IP address
+let IP = "PUBLIC_IP_ADDRESS_HERE";
+DeviceInfo
+| where PublicIP contains IP
+| distinct DeviceName, PublicIP, OSPlatform, LoggedOnUsers
+
