@@ -1,0 +1,15 @@
+// single process
+let TargetProcess = "FILE_NAME_HERE";
+union DeviceNetworkEvents, DeviceProcessEvents, DeviceFileEvents, DeviceEvents, DeviceRegistryEvents
+| where InitiatingProcessFileName startswith TargetFileName 
+    or FileName startswith TargetFileName 
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ActionType, FileName, FolderPath, LocalIP, LocalPort, RemoteUrl, RemoteIP, RemotePort, SHA256, InitiatingProcessFileName, InitiatingProcessSHA256, InitiatingProcessCommandLine, RegistryKey, RegistryValueType, RegistryValueName, RegistryValueData, PreviousRegistryKey, PreviousRegistryValueName, PreviousRegistryValueData
+
+// multiple processes
+let TargetFileNames = dynamic(["FILE_NAME_1",
+    "FILE_NAME_2",
+    "FILE_NAME_3"]);
+union DeviceNetworkEvents, DeviceProcessEvents, DeviceFileEvents, DeviceEvents, DeviceRegistryEvents
+| where InitiatingProcessFileName has_any (TargetFileNames)
+    or FileName has_any (TargetFileNames)
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ActionType, FileName, FolderPath, LocalIP, LocalPort, RemoteUrl, RemoteIP, RemotePort, SHA256, InitiatingProcessFileName, InitiatingProcessSHA256, InitiatingProcessCommandLine, RegistryKey, RegistryValueType, RegistryValueName, RegistryValueData, PreviousRegistryKey, PreviousRegistryValueName, PreviousRegistryValueData
