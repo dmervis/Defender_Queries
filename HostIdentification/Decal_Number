@@ -10,26 +10,3 @@ DeviceInfo
 | mv-expand parse_json(LoggedOnUsers)
 | evaluate bag_unpack(LoggedOnUsers)
 | distinct DeviceName, OSPlatform, UserName, DomainName, User_SID = Sid, PublicIP, CIDR, CIDRASNName, Country_Code = country_iso_code, Country_Name = country_name, is_anonymous_proxy
-
-// find host by active user
-let ActiveUser = "USERNAME_HERE";
-DeviceInfo
-| where LoggedOnUsers contains ActiveUser
-| extend 
-    UserName = extract('"UserName":"([^"]+)"', 1, LoggedOnUsers),
-    DomainName = extract('"DomainName":"([^"]+)"', 1, LoggedOnUsers),
-    Sid = extract('"Sid":"([^"]+)"', 1, LoggedOnUsers)
-| distinct DeviceName, PublicIP, OSPlatform, UserName, DomainName, Sid
-
-// find hostname by public IP address
-let IP = "PUBLIC_IP_ADDRESS_HERE";
-DeviceInfo
-| where PublicIP contains IP
-| distinct DeviceName, PublicIP, OSPlatform, LoggedOnUsers
-
-// find hostname by private IP address
-let IP = "PRIVATE_IP_ADDRESS_HERE";
-DeviceNetworkEvents
-| where LocalIP contains IP
-| where InitiatingProcessAccountName !in ('system', 'network service', '')
-| distinct DeviceName, LocalIP, InitiatingProcessAccountName
