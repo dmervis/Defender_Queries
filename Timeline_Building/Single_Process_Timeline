@@ -1,5 +1,7 @@
-let TargetProcess = "FILE_NAME_HERE";
+let TargetProcess = "File_Name_Here";
+let TargetDevice = "Device_Name_Here";
 union DeviceNetworkEvents, DeviceProcessEvents, DeviceFileEvents, DeviceEvents, DeviceRegistryEvents
-| where InitiatingProcessFileName startswith TargetFileName 
-    or FileName startswith TargetFileName 
+| where DeviceName contains TargetDevice
+| where InitiatingProcessFileName startswith TargetProcess 
+    or FileName startswith TargetProcess 
 | project Timestamp, DeviceName, InitiatingProcessAccountName, ActionType, FileName, FolderPath, LocalIP, LocalPort, RemoteUrl, RemoteIP, RemotePort, SHA256, InitiatingProcessFileName, InitiatingProcessSHA256, InitiatingProcessCommandLine, RegistryKey, RegistryValueType, RegistryValueName, RegistryValueData, PreviousRegistryKey, PreviousRegistryValueName, PreviousRegistryValueData
